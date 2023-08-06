@@ -1,0 +1,40 @@
+{
+  "type": "module",
+  "name": "template-service",
+  "description": "this is the gasta template-service",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "c8 tap \"test/**/*.test.js\"",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js",
+    "prod": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/autoload": "^5.0.0",
+    "@fastify/sensible": "^5.0.0",
+    "@fastify/swagger": "^8.8.0",
+    "fastify": "^4.0.0",
+    "fastify-cli": "^5.8.0",
+    "fastify-plugin": "^4.0.0",
+    "firebase-admin": "^11.10.1",
+    "http-status-codes": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.46.0",
+    "eslint-config-semistandard": "^17.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "tap": "^16.1.0"
+  },
+  "tap": {
+    "coverage": false
+  }
+}
