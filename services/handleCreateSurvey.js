@@ -3,9 +3,12 @@ import { firestore } from '../firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
 
 export default async function (request, reply) {
+  const { uid } = request.headers;
   const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, customField } = request.body;
 
   const newSurvey = {
+    uid,
+    surveyInfo: createNewSurveyInfo(),
     companyId,
     name,
     description,
@@ -23,9 +26,9 @@ export default async function (request, reply) {
       .collection('survey')
       .add(newSurvey);
 
-    console.dir(response);
+    const id = response._path.segments.pop();
 
-    return getSurvey(request, reply, response);
+    await getSurvey(request, reply, id);
   } catch (error) {
     reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -33,27 +36,29 @@ export default async function (request, reply) {
   }
 }
 
-async function getSurvey (request, reply, firebaseResponse) {
+async function getSurvey (request, reply, surveyId) {
   const { companyId } = request.body;
-  const surveyId = firebaseResponse._path.segments.pop();
 
   try {
     const survey = await firestore
       .collection('companies')
       .doc(companyId)
       .collection('survey')
-      .get(surveyId);
+      .doc(surveyId)
+      .get();
+
+    console.log(survey);
 
     if (!survey.exists) {
       reply
         .code(StatusCodes.NOT_FOUND)
         .send({
           statusCode: StatusCodes.NOT_FOUND,
-          message: `the survey with id ${surveyId} was not found`
+          message: `the survey with id "${surveyId}" was not found`
         });
     }
 
-    const mappedSurvey = mapSurvey(survey);
+    const mappedSurvey = mapSurvey(await survey);
 
     reply
       .code(StatusCodes.CREATED)
@@ -63,4 +68,12 @@ async function getSurvey (request, reply, firebaseResponse) {
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
+}
+
+function createNewSurveyInfo () {
+  return {
+    creationTimestamp: Date.now(),
+    lastModified: Date.now(),
+    version: 1
+  };
 }
