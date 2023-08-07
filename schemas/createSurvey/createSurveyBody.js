@@ -1,16 +1,4 @@
-const question = {
-  type: 'object',
-  properties: {
-    questionType: { type: 'string' },
-    isOptional: { type: 'boolean' },
-    questionText: { type: 'string', minLength: 10 },
-    description: { type: 'string' },
-    data: {
-      type: 'object'
-    }
-  },
-  required: ['questionType', 'isOptional', 'questionText', 'description', 'data']
-};
+import questionSchema from '../questionSchema.js';
 
 export default {
   type: 'object',
@@ -23,7 +11,7 @@ export default {
     fixedOrder: { type: 'boolean' },
     questions: {
       type: 'array',
-      items: question
+      items: questionSchema
     },
     customField: {
       type: 'object'
