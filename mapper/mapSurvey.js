@@ -13,7 +13,7 @@ export default function (survey) {
     customField: unpackValueTypes(customField),
     startDate: buildDateInfo(startDate.integerValue),
     expiringDate: buildDateInfo(expiringDate.integerValue),
-    questions: unpackValueTypes(questions)
+    questions: getQuestions(questions)
   };
 
   return mappedCompany;
@@ -38,5 +38,14 @@ function getSurveyInfo (surveyInfo) {
     creationTimestamp: buildDateInfo(creationTimestamp),
     lastModified: buildDateInfo(lastModified),
     version
+  };
+}
+
+function getQuestions (questions) {
+  const mappedQuestions = unpackValueTypes(questions);
+
+  return {
+    questionList: mappedQuestions,
+    questionAmount: mappedQuestions.length
   };
 }
