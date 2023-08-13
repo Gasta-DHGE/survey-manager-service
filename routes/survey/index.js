@@ -5,6 +5,7 @@ import createSurveyHeader from '../../schemas/createSurvey/createSurveyHeader.js
 import createSurveyResponse from '../../schemas/createSurvey/createSurveyResponse.js';
 import handleGetSurvey from '../../services/handleGetSurvey.js';
 import getSurveyQuery from '../../schemas/getSurvey/getSurveyQuery.js';
+import handleUpdateSurvey from '../../services/handleUpdateSurvey.js';
 
 export default async function (fastify, opts) {
   fastify.post('/', { schema: { body: createSurveyBody, header: createSurveyHeader, response: createSurveyResponse } }, async function (request, reply) {
@@ -13,7 +14,7 @@ export default async function (fastify, opts) {
     return handleCreateSurvey(request, reply);
   });
 
-  fastify.get('/', { schema: { querystring: getSurveyQuery } }, async function (request, reply) {
+  fastify.get('/', { schema: { querystring: getSurveyQuery, response: createSurveyResponse } }, async function (request, reply) {
     await validateApiAccess(request, reply);
 
     return handleGetSurvey(request, reply);
@@ -22,7 +23,7 @@ export default async function (fastify, opts) {
   fastify.put('/', async function (request, reply) {
     await validateApiAccess(request, reply);
 
-    return 'update survey';
+    return handleUpdateSurvey(request, reply);
   });
 
   fastify.delete('/', async function (request, reply) {

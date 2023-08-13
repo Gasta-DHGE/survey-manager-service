@@ -28,6 +28,7 @@ export default async function (request, reply) {
 
     const id = response._path.segments.pop();
 
+    await setReference(reply, companyId, id);
     await getSurvey(request, reply, id);
   } catch (error) {
     reply
@@ -63,6 +64,19 @@ async function getSurvey (request, reply, surveyId) {
     reply
       .code(StatusCodes.CREATED)
       .send(mappedSurvey);
+  } catch (error) {
+    reply
+      .code(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(error);
+  }
+}
+
+async function setReference (reply, companyId, id) {
+  try {
+    await firestore
+      .collection('surveys')
+      .doc(id)
+      .set({ companyId });
   } catch (error) {
     reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
