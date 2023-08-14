@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { firestore } from '../firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
+import uniqid from 'uniqid';
 
 export default async function (request, reply) {
   const { uid } = request.headers;
@@ -15,7 +16,7 @@ export default async function (request, reply) {
     startDate,
     expiringDate,
     fixedOrder,
-    questions,
+    questions: mapQuestions(questions),
     customField
   };
 
@@ -47,8 +48,6 @@ async function getSurvey (request, reply, surveyId) {
       .collection('survey')
       .doc(surveyId)
       .get();
-
-    console.log(survey);
 
     if (!survey.exists) {
       reply
@@ -90,4 +89,11 @@ function createNewSurveyInfo () {
     lastModified: Date.now(),
     version: 1
   };
+}
+
+function mapQuestions (questions) {
+  return questions.map(question => {
+    question.questionId = uniqid('gasta-');
+    return question;
+  });
 }

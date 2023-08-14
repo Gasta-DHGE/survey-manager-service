@@ -1,19 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 import { firestore } from '../firebase.js';
+import mapSurvey from '../mapper/mapSurvey.js';
 
 export default async function (request, reply) {
   const { companyId, surveyId, version: lastVersion } = request.query;
-  const { name, description, startDate, expiringDate, fixedOrder, questions, customField } = request.body;
+
+  const surveyRef = firestore
+    .collection('companies')
+    .doc(companyId)
+    .collection('survey')
+    .doc(surveyId);
 
   try {
-    const snapshot = await firestore
-      .collection('companies')
-      .doc(companyId)
-      .collection('survey')
-      .doc(surveyId)
-      .get();
+    const snapshot = await surveyRef.get();
 
-    const { surveyInfo: { version } } = snapshot.data();
+    const { surveyInfo, surveyInfo: { version } } = snapshot.data();
 
     if (lastVersion !== version) {
       reply
@@ -24,12 +25,64 @@ export default async function (request, reply) {
         });
     }
 
-    reply
-      .code(StatusCodes.ACCEPTED)
-      .send(snapshot.data());
+    return updateSurvey(request, reply, surveyRef, surveyInfo);
   } catch (error) {
     reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
+}
+
+async function updateSurvey (request, reply, surveyRef, surveyInfo) {
+  const updateBody = getUpdateBody(request.body, surveyInfo);
+
+  try {
+    await surveyRef.set(updateBody, { merge: true });
+    const updatedSurvey = await surveyRef.get();
+
+    const mappedSurvey = mapSurvey(updatedSurvey);
+
+    reply
+      .code(StatusCodes.CREATED)
+      .send(mappedSurvey);
+  } catch (error) {
+    reply
+      .code(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(error);
+  }
+}
+
+function getUpdateBody (body, surveyInfo) {
+  const { name, description, startDate, expiringDate, fixedOrder, questions, customField } = body;
+
+  const updateBody = {};
+
+  if (name !== undefined) {
+    updateBody.name = name;
+  }
+  if (description !== undefined) {
+    updateBody.description = description;
+  }
+  if (startDate !== undefined) {
+    updateBody.startDate = startDate;
+  }
+  if (expiringDate !== undefined) {
+    updateBody.expiringDate = expiringDate;
+  }
+  if (fixedOrder !== undefined) {
+    updateBody.fixedOrder = fixedOrder;
+  }
+  if (questions !== undefined) {
+    updateBody.questions = questions;
+  }
+  if (customField !== undefined) {
+    updateBody.customField = customField;
+  }
+
+  surveyInfo.version++;
+  surveyInfo.lastModified = Date.now();
+
+  updateBody.surveyInfo = surveyInfo;
+
+  return updateBody;
 }

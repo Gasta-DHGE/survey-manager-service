@@ -6,6 +6,10 @@ import createSurveyResponse from '../../schemas/createSurvey/createSurveyRespons
 import handleGetSurvey from '../../services/handleGetSurvey.js';
 import getSurveyQuery from '../../schemas/getSurvey/getSurveyQuery.js';
 import handleUpdateSurvey from '../../services/handleUpdateSurvey.js';
+import updateSurveyQuery from '../../schemas/updateSurvey/updateSurveyQuery.js';
+import updateSurveyBody from '../../schemas/updateSurvey/updateSurveyBody.js';
+import handleDeleteSurvey from '../../services/handleDeleteSurvey.js';
+import deleteSurveyQuery from '../../schemas/deleteSurvey/deleteSurveyQuery.js';
 
 export default async function (fastify, opts) {
   fastify.post('/', { schema: { body: createSurveyBody, header: createSurveyHeader, response: createSurveyResponse } }, async function (request, reply) {
@@ -20,15 +24,15 @@ export default async function (fastify, opts) {
     return handleGetSurvey(request, reply);
   });
 
-  fastify.put('/', async function (request, reply) {
+  fastify.put('/', { schema: { body: updateSurveyBody, querystring: updateSurveyQuery, response: createSurveyResponse } }, async function (request, reply) {
     await validateApiAccess(request, reply);
 
     return handleUpdateSurvey(request, reply);
   });
 
-  fastify.delete('/', async function (request, reply) {
+  fastify.delete('/', { schema: { querystring: deleteSurveyQuery } }, async function (request, reply) {
     await validateApiAccess(request, reply);
 
-    return 'delete survey';
+    return handleDeleteSurvey(request, reply);
   });
 }

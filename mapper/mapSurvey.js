@@ -20,7 +20,6 @@ export default function (survey) {
 }
 
 function buildDateInfo (timestamp) {
-  console.log(timestamp);
   const date = new Date(timestamp * 1000);
   return {
     timestampSeconds: parseInt(timestamp),

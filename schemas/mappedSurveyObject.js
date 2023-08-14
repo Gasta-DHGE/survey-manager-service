@@ -1,5 +1,5 @@
 import dateInfoSchema from './dateInfoSchema.js';
-import questionSchema from './questionSchema.js';
+import questionSchemaResponse from './questionSchemaResponse.js';
 
 export default {
   type: 'object',
@@ -8,6 +8,7 @@ export default {
     companyId: { type: 'string' },
     name: { type: 'string' },
     description: { type: 'string' },
+    id: { type: 'string' },
     startDate: dateInfoSchema,
     expiringDate: dateInfoSchema,
     surveyInfo: {
@@ -24,7 +25,7 @@ export default {
         questionAmount: { type: 'number' },
         questionList: {
           type: 'array',
-          items: questionSchema
+          items: questionSchemaResponse
         }
       }
     },
