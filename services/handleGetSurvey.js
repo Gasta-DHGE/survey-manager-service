@@ -8,11 +8,12 @@ export default async function (request, reply) {
   const { companyId, uid, surveyId } = request.query;
 
   if (companyId !== undefined) {
-    return handleGetSurveyByCompanyId(request, reply);
+    await handleGetSurveyByCompanyId(request, reply);
   } else if (uid !== undefined) {
-    return handleGetSurveyByUid(request, reply);
+    console.log('this is uid use case');
+    await handleGetSurveyByUid(request, reply);
   } else if (surveyId !== undefined) {
-    return handleGetCompanyBySurveyId(request, reply);
+    await handleGetCompanyBySurveyId(request, reply);
   } else {
     reply
       .code(StatusCodes.BAD_REQUEST)
@@ -52,6 +53,8 @@ async function handleGetSurveyByCompanyId (request, reply) {
 async function handleGetSurveyByUid (request, reply) {
   const { uid } = request.query;
 
+  console.log(`uid function: "${uid}"`);
+
   try {
     const snapshot = await firestore
       .collection('companies')
@@ -66,9 +69,16 @@ async function handleGetSurveyByUid (request, reply) {
 
     const companySurveySnapshots = await getCompanySurveyArray(snapshot, uid);
 
+    const mappedCompanies = mapMultipleCompanySurveys(companySurveySnapshots);
+
+    console.log('==============================');
+    console.log(mappedCompanies);
+    console.log('==============================');
+    console.log('send reply');
+
     reply
       .code(StatusCodes.ACCEPTED)
-      .send(mapMultipleCompanySurveys(companySurveySnapshots));
+      .send(mappedCompanies);
   } catch (error) {
     reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -147,10 +157,6 @@ async function getCompanySurveyArray (companySnapshots, uid) {
       .collection('survey')
       .where('uid', '==', uid)
       .get();
-
-    if (surveySnapshot.empty === true) {
-      return [];
-    }
 
     return surveySnapshot;
   }));

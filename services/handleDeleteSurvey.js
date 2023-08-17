@@ -12,6 +12,11 @@ export default async function (request, reply) {
       .doc(surveyId)
       .delete();
 
+    firestore
+      .collection('surveys')
+      .doc(surveyId)
+      .delete();
+
     reply
       .code(StatusCodes.OK)
       .send(`survey with id "${surveyId}" was deleted`);

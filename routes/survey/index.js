@@ -5,6 +5,7 @@ import createSurveyHeader from '../../schemas/createSurvey/createSurveyHeader.js
 import createSurveyResponse from '../../schemas/createSurvey/createSurveyResponse.js';
 import handleGetSurvey from '../../services/handleGetSurvey.js';
 import getSurveyQuery from '../../schemas/getSurvey/getSurveyQuery.js';
+import getSurveyResponse from '../../schemas/getSurvey/getSurveyResponse.js';
 import handleUpdateSurvey from '../../services/handleUpdateSurvey.js';
 import updateSurveyQuery from '../../schemas/updateSurvey/updateSurveyQuery.js';
 import updateSurveyBody from '../../schemas/updateSurvey/updateSurveyBody.js';
@@ -18,7 +19,7 @@ export default async function (fastify, opts) {
     return handleCreateSurvey(request, reply);
   });
 
-  fastify.get('/', { schema: { querystring: getSurveyQuery, response: createSurveyResponse } }, async function (request, reply) {
+  fastify.get('/', { schema: { querystring: getSurveyQuery, response: getSurveyResponse } }, async function (request, reply) {
     await validateApiAccess(request, reply);
 
     return handleGetSurvey(request, reply);
