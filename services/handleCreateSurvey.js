@@ -100,19 +100,18 @@ function mapQuestions (questions) {
   });
 }
 
-
-async function checkCompanyExists(companyId, reply) {
-  const companySnapshot = firestore
+async function checkCompanyExists (companyId, reply) {
+  const companySnapshot = await firestore
     .collection('companies')
     .doc(companyId)
     .get();
-  
+
   if (companySnapshot.exists === false) {
     reply
       .code(StatusCodes.BAD_REQUEST)
       .send({
         statusCode: StatusCodes.BAD_REQUEST,
-        message: 'tbd'
-      })
+        message: `there is no company with id "${companyId}"`
+      });
   }
 }

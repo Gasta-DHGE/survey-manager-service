@@ -16,6 +16,9 @@ export default async function (request, reply) {
 
     const { surveyInfo, surveyInfo: { version } } = snapshot.data();
 
+    console.log(version);
+    console.log(lastVersion);
+
     if (lastVersion !== version) {
       reply
         .code(StatusCodes.BAD_REQUEST)
