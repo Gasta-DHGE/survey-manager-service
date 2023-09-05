@@ -7,6 +7,8 @@ export default async function (request, reply) {
   const { uid } = request.headers;
   const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, customField } = request.body;
 
+  await checkCompanyExists(companyId, reply);
+
   const newSurvey = {
     uid,
     surveyInfo: createNewSurveyInfo(),
@@ -96,4 +98,21 @@ function mapQuestions (questions) {
     question.questionId = uniqid('gasta-');
     return question;
   });
+}
+
+
+async function checkCompanyExists(companyId, reply) {
+  const companySnapshot = firestore
+    .collection('companies')
+    .doc(companyId)
+    .get();
+  
+  if (companySnapshot.exists === false) {
+    reply
+      .code(StatusCodes.BAD_REQUEST)
+      .send({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'tbd'
+      })
+  }
 }
