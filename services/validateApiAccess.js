@@ -3,7 +3,7 @@ import { auth } from '../firebase.js';
 
 export default async function (request, reply) {
   if (request.headers['gasta-dhge'] !== 'cb041321-b510-45ca-9bd6-748b957b83da') {
-    reply
+    return reply
       .code(StatusCodes.UNAUTHORIZED)
       .send({
         statusCode: StatusCodes.UNAUTHORIZED,
@@ -12,7 +12,7 @@ export default async function (request, reply) {
   }
 
   if (request.headers.uid === undefined) {
-    reply
+    return reply
       .code(StatusCodes.UNAUTHORIZED)
       .send({
         statusCode: StatusCodes.UNAUTHORIZED,
@@ -24,7 +24,7 @@ export default async function (request, reply) {
 
       await auth.getUser(uid);
     } catch (error) {
-      reply
+      return reply
         .code(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({
           statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
