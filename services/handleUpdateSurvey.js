@@ -16,11 +16,8 @@ export default async function (request, reply) {
 
     const { surveyInfo, surveyInfo: { version } } = snapshot.data();
 
-    console.log(version);
-    console.log(lastVersion);
-
     if (lastVersion !== version) {
-      reply
+      return reply
         .code(StatusCodes.BAD_REQUEST)
         .send({
           statusCode: StatusCodes.BAD_REQUEST,
@@ -30,7 +27,7 @@ export default async function (request, reply) {
 
     return updateSurvey(request, reply, surveyRef, surveyInfo);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -45,11 +42,11 @@ async function updateSurvey (request, reply, surveyRef, surveyInfo) {
 
     const mappedSurvey = mapSurvey(updatedSurvey);
 
-    reply
+    return reply
       .code(StatusCodes.CREATED)
       .send(mappedSurvey);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }

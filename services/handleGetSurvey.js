@@ -15,7 +15,7 @@ export default async function (request, reply) {
   } else if (surveyId !== undefined) {
     await handleGetCompanyBySurveyId(request, reply);
   } else {
-    reply
+    return reply
       .code(StatusCodes.BAD_REQUEST)
       .send({
         statusCode: StatusCodes.BAD_REQUEST,
@@ -35,16 +35,16 @@ async function handleGetSurveyByCompanyId (request, reply) {
       .get();
 
     if (response.empty) {
-      reply
+      return reply
         .code(StatusCodes.OK)
         .send([]);
     }
 
-    reply
+    return reply
       .code(StatusCodes.ACCEPTED)
       .send(mapSurveys(response));
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -62,7 +62,7 @@ async function handleGetSurveyByUid (request, reply) {
       .get();
 
     if (snapshot.empty) {
-      reply
+      return reply
         .code(StatusCodes.OK)
         .send([]);
     }
@@ -76,11 +76,11 @@ async function handleGetSurveyByUid (request, reply) {
     console.log('==============================');
     console.log('send reply');
 
-    reply
+    return reply
       .code(StatusCodes.ACCEPTED)
       .send(mappedCompanies);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -96,7 +96,7 @@ async function handleGetCompanyBySurveyId (request, reply) {
       .get();
 
     if (!surveyRefSnapshot.exists) {
-      reply
+      return reply
         .code(StatusCodes.NOT_FOUND)
         .send({
           statusCode: StatusCodes.NOT_FOUND,
@@ -108,11 +108,11 @@ async function handleGetCompanyBySurveyId (request, reply) {
 
     const surveySnapshot = await getSurveySnapshot(reply, companyId, surveyId);
 
-    reply
+    return reply
       .code(StatusCodes.ACCEPTED)
       .send(mapSurvey(surveySnapshot));
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -128,7 +128,7 @@ async function getSurveySnapshot (reply, companyId, surveyId) {
       .get();
 
     if (!surveyRefSnapshot.exists) {
-      reply
+      return reply
         .code(StatusCodes.NOT_FOUND)
         .send({
           statusCode: StatusCodes.NOT_FOUND,
@@ -138,7 +138,7 @@ async function getSurveySnapshot (reply, companyId, surveyId) {
 
     return surveyRefSnapshot;
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }

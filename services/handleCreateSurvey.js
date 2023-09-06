@@ -34,7 +34,7 @@ export default async function (request, reply) {
     await setReference(reply, companyId, id);
     await getSurvey(request, reply, id);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -52,7 +52,7 @@ async function getSurvey (request, reply, surveyId) {
       .get();
 
     if (!survey.exists) {
-      reply
+      return reply
         .code(StatusCodes.NOT_FOUND)
         .send({
           statusCode: StatusCodes.NOT_FOUND,
@@ -62,11 +62,11 @@ async function getSurvey (request, reply, surveyId) {
 
     const mappedSurvey = mapSurvey(await survey);
 
-    reply
+    return reply
       .code(StatusCodes.CREATED)
       .send(mappedSurvey);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -79,7 +79,7 @@ async function setReference (reply, companyId, id) {
       .doc(id)
       .set({ companyId });
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
@@ -107,7 +107,7 @@ async function checkCompanyExists (companyId, reply) {
     .get();
 
   if (companySnapshot.exists === false) {
-    reply
+    return reply
       .code(StatusCodes.BAD_REQUEST)
       .send({
         statusCode: StatusCodes.BAD_REQUEST,

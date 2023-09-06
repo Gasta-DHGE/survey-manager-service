@@ -17,11 +17,11 @@ export default async function (request, reply) {
       .doc(surveyId)
       .delete();
 
-    reply
+    return reply
       .code(StatusCodes.OK)
       .send(`survey with id "${surveyId}" was deleted`);
   } catch (error) {
-    reply
+    return reply
       .code(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error);
   }
