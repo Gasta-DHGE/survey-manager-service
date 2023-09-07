@@ -1,19 +1,24 @@
 import { unpackValueTypes } from '../services/utils.js';
 
 export default function (survey) {
-  const { uid, surveyInfo, companyId, name, description, customField, startDate, expiringDate, fixedOrder, questions } = survey._fieldsProto;
+  const unpackedSurvey = survey.data();
+
+  const { uid, surveyInfo, companyId, name, description, customField, startDate, expiringDate, questions, fixedOrder } = unpackedSurvey;
 
   const mappedCompany = {
-    uid: uid.stringValue,
-    surveyInfo: getSurveyInfo(surveyInfo),
+    uid,
+    surveyInfo,
     id: survey.id,
-    companyId: companyId.stringValue,
-    name: name.stringValue,
-    description: description.stringValue,
-    customField: unpackValueTypes(customField),
-    startDate: buildDateInfo(startDate.integerValue),
-    expiringDate: buildDateInfo(expiringDate.integerValue),
-    questions: getQuestions(questions, fixedOrder)
+    companyId,
+    name,
+    description,
+    customField,
+    startDate: buildDateInfo(startDate),
+    expiringDate: buildDateInfo(expiringDate),
+    questions: {
+      questionList: questions,
+      fixedOrder
+    }
   };
 
   return mappedCompany;

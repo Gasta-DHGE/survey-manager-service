@@ -9,6 +9,11 @@ export default async function (request, reply) {
 
   await checkCompanyExists(companyId, reply);
 
+  const mappedQuestions = mapQuestions(questions);
+
+  console.log('mapped questions: ');
+  console.log(mappedQuestions);
+
   const newSurvey = {
     uid,
     surveyInfo: createNewSurveyInfo(),
@@ -18,7 +23,7 @@ export default async function (request, reply) {
     startDate,
     expiringDate,
     fixedOrder,
-    questions: mapQuestions(questions),
+    questions: mappedQuestions,
     customField
   };
 
@@ -95,8 +100,28 @@ function createNewSurveyInfo () {
 
 function mapQuestions (questions) {
   return questions.map(question => {
-    question.questionId = uniqid('gasta-');
-    return question;
+    const { isOptional, questionType, questionText, description, data } = question;
+
+    const mappedData = {};
+
+    const arr = Object.keys(data);
+
+    arr.forEach(key => {
+      mappedData[key] = data[key];
+    });
+
+    const mappedQuestion = {
+      isOptional,
+      questionType,
+      questionText,
+      description,
+      data: mappedData,
+      questionId: uniqid('gasta-')
+    };
+
+    console.log(mappedQuestion);
+
+    return mappedQuestion;
   });
 }
 

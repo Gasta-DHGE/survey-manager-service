@@ -6,7 +6,20 @@ export default {
     questionText: { type: 'string', minLength: 10 },
     description: { type: 'string' },
     data: {
-      type: 'object'
+      type: 'object',
+      properties: {
+        value: {
+          type: ['null', 'number', 'boolean', 'array', 'string'],
+          items: {
+            oneOf: [
+              { type: 'string' },
+              { type: 'number' },
+              { type: 'boolean' }
+            ]
+          }
+        }
+      },
+      required: ['value']
     }
   },
   required: ['questionType', 'isOptional', 'questionText', 'description', 'data']
