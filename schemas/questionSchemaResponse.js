@@ -20,7 +20,7 @@ export default {
           }
         }
       },
-      required: ['value']
+      required: []
     }
   },
   required: ['questionType', 'isOptional', 'questionText', 'description', 'data']

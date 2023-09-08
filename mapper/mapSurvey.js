@@ -1,5 +1,3 @@
-import { unpackValueTypes } from '../services/utils.js';
-
 export default function (survey) {
   const unpackedSurvey = survey.data();
 
@@ -32,25 +30,5 @@ function buildDateInfo (timestamp) {
     isoTime: date.toISOString(),
     dateTime: date.toDateString(),
     utcTime: date.toUTCString()
-  };
-}
-
-function getSurveyInfo (surveyInfo) {
-  const { creationTimestamp, lastModified, version } = unpackValueTypes(surveyInfo);
-
-  return {
-    creationTimestamp: buildDateInfo(creationTimestamp),
-    lastModified: buildDateInfo(lastModified),
-    version: parseInt(version)
-  };
-}
-
-function getQuestions (questions, fixedOrder) {
-  const mappedQuestions = unpackValueTypes(questions);
-
-  return {
-    fixedOrder: fixedOrder.booleanValue,
-    questionList: mappedQuestions,
-    questionAmount: mappedQuestions.length
   };
 }
