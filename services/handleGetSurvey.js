@@ -50,6 +50,7 @@ async function handleGetSurveyByCompanyId (request, reply) {
 }
 
 async function handleGetSurveyByUid (request, reply) {
+  console.log('get surveys by userId');
   const { uid } = request.query;
 
   try {
