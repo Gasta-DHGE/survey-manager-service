@@ -11,9 +11,6 @@ export default async function (request, reply) {
 
   const mappedQuestions = mapQuestions(questions);
 
-  console.log('mapped questions: ');
-  console.log(mappedQuestions);
-
   const newSurvey = {
     uid,
     surveyInfo: createNewSurveyInfo(),
@@ -118,8 +115,6 @@ function mapQuestions (questions) {
       data: mappedData,
       questionId: uniqid('gasta-')
     };
-
-    console.log(mappedQuestion);
 
     return mappedQuestion;
   });

@@ -1,3 +1,5 @@
+import questionData from './questionData.js';
+
 export default {
   type: 'object',
   properties: {
@@ -5,22 +7,7 @@ export default {
     isOptional: { type: 'boolean' },
     questionText: { type: 'string', minLength: 10 },
     description: { type: 'string' },
-    data: {
-      type: 'object',
-      properties: {
-        value: {
-          type: ['null', 'number', 'boolean', 'array', 'string'],
-          items: {
-            oneOf: [
-              { type: 'string' },
-              { type: 'number' },
-              { type: 'boolean' }
-            ]
-          }
-        }
-      },
-      required: ['value']
-    }
+    data: questionData
   },
   required: ['questionType', 'isOptional', 'questionText', 'description', 'data']
 };

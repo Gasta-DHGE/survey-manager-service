@@ -10,7 +10,6 @@ export default async function (request, reply) {
   if (companyId !== undefined) {
     await handleGetSurveyByCompanyId(request, reply);
   } else if (uid !== undefined) {
-    console.log('this is uid use case');
     await handleGetSurveyByUid(request, reply);
   } else if (surveyId !== undefined) {
     await handleGetCompanyBySurveyId(request, reply);
@@ -53,8 +52,6 @@ async function handleGetSurveyByCompanyId (request, reply) {
 async function handleGetSurveyByUid (request, reply) {
   const { uid } = request.query;
 
-  console.log(`uid function: "${uid}"`);
-
   try {
     const snapshot = await firestore
       .collection('companies')
@@ -70,11 +67,6 @@ async function handleGetSurveyByUid (request, reply) {
     const companySurveySnapshots = await getCompanySurveyArray(snapshot, uid);
 
     const mappedCompanies = mapMultipleCompanySurveys(companySurveySnapshots);
-
-    console.log('==============================');
-    console.log(mappedCompanies);
-    console.log('==============================');
-    console.log('send reply');
 
     return reply
       .code(StatusCodes.ACCEPTED)
