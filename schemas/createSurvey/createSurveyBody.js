@@ -1,4 +1,5 @@
 import questionSchema from '../questionSchema.js';
+import surveyReward from '../surveyReward.js';
 
 export default {
   type: 'object',
@@ -9,6 +10,7 @@ export default {
     startDate: { type: 'number' },
     expiringDate: { type: 'number' },
     fixedOrder: { type: 'boolean' },
+    reward: surveyReward,
     questions: {
       type: 'array',
       items: questionSchema
@@ -17,5 +19,5 @@ export default {
       type: 'object'
     }
   },
-  required: ['name', 'description', 'startDate', 'expiringDate', 'fixedOrder', 'questions']
+  required: ['name', 'description', 'startDate', 'expiringDate', 'fixedOrder', 'reward', 'questions']
 };

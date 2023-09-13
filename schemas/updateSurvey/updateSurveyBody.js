@@ -1,4 +1,5 @@
 import questionSchema from '../questionSchema.js';
+import surveyReward from '../surveyReward.js';
 
 export default {
   type: 'object',
@@ -13,6 +14,7 @@ export default {
       type: 'array',
       items: questionSchema
     },
+    reward: surveyReward,
     customField: {
       type: 'object'
     }

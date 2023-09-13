@@ -1,11 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 import { firestore } from '../firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
-import uniqid from 'uniqid';
+import mapQuestions from './mapQuestions.js';
 
 export default async function (request, reply) {
   const { uid } = request.headers;
-  const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, customField } = request.body;
+  const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, reward, customField } = request.body;
 
   await checkCompanyExists(companyId, reply);
 
@@ -21,6 +21,7 @@ export default async function (request, reply) {
     expiringDate,
     fixedOrder,
     questions: mappedQuestions,
+    reward,
     customField
   };
 
@@ -93,31 +94,6 @@ function createNewSurveyInfo () {
     lastModified: Date.now(),
     version: 1
   };
-}
-
-function mapQuestions (questions) {
-  return questions.map(question => {
-    const { isOptional, questionType, questionText, description, data } = question;
-
-    const mappedData = {};
-
-    const arr = Object.keys(data);
-
-    arr.forEach(key => {
-      mappedData[key] = data[key];
-    });
-
-    const mappedQuestion = {
-      isOptional,
-      questionType,
-      questionText,
-      description,
-      data: mappedData,
-      questionId: uniqid('gasta-')
-    };
-
-    return mappedQuestion;
-  });
 }
 
 async function checkCompanyExists (companyId, reply) {

@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { firestore } from '../firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
+import mapQuestions from './mapQuestions.js';
 
 export default async function (request, reply) {
   const { companyId, surveyId, version: lastVersion } = request.query;
@@ -53,7 +54,7 @@ async function updateSurvey (request, reply, surveyRef, surveyInfo) {
 }
 
 function getUpdateBody (body, surveyInfo) {
-  const { name, description, startDate, expiringDate, fixedOrder, questions, customField } = body;
+  const { name, description, startDate, expiringDate, fixedOrder, questions, reward, customField } = body;
 
   const updateBody = {};
 
@@ -73,7 +74,10 @@ function getUpdateBody (body, surveyInfo) {
     updateBody.fixedOrder = fixedOrder;
   }
   if (questions !== undefined) {
-    updateBody.questions = questions;
+    updateBody.questions = mapQuestions(questions);
+  }
+  if (reward !== undefined) {
+    updateBody.reward = reward;
   }
   if (customField !== undefined) {
     updateBody.customField = customField;

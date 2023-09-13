@@ -1,5 +1,6 @@
 import dateInfoSchema from './dateInfoSchema.js';
 import questionSchemaResponse from './questionSchemaResponse.js';
+import surveyReward from './surveyReward.js';
 
 export default {
   type: 'object',
@@ -29,6 +30,7 @@ export default {
         }
       }
     },
+    reward: surveyReward,
     customField: {
       type: 'object'
     }

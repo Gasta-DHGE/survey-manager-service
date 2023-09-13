@@ -1,7 +1,7 @@
 export default function (survey) {
   const unpackedSurvey = survey.data();
 
-  const { uid, surveyInfo, companyId, name, description, customField, startDate, expiringDate, questions, fixedOrder } = unpackedSurvey;
+  const { uid, surveyInfo, companyId, name, description, customField, startDate, expiringDate, questions, reward, fixedOrder } = unpackedSurvey;
 
   const mappedCompany = {
     uid,
@@ -13,6 +13,7 @@ export default function (survey) {
     customField,
     startDate: buildDateInfo(startDate),
     expiringDate: buildDateInfo(expiringDate),
+    reward,
     questions: {
       questionList: questions,
       fixedOrder
