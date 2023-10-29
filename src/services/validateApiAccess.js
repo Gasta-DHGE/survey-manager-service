@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { auth } from '../firebase.js';
+import { auth } from '../firebase/firebase.js';
 
 export default async function (request, reply) {
   if (request.headers['gasta-dhge'] !== 'cb041321-b510-45ca-9bd6-748b957b83da') {

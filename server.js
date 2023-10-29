@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import Fastify from 'fastify';
 import closeWithGrace from 'close-with-grace';
-import appService from './app.js';
+import appService from './src/app.js';
 dotenv.config();
 
 const { ADDRESS = 'localhost', PORT = '3000' } = process.env;

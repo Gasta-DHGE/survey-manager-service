@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { firestore } from '../firebase.js';
+import { firestore } from '../firebase/firebase.js';
 
 export default async function (request, reply) {
   const { companyId, surveyId } = request.query;

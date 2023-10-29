@@ -1,29 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
-import { firestore } from '../firebase.js';
+import { firestore } from '../firebase/firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
 import mapQuestions from './mapQuestions.js';
 
 export default async function (request, reply) {
-  const { uid } = request.headers;
-  const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, reward, customField } = request.body;
-
+  const { companyId } = request.body;
   await checkCompanyExists(companyId, reply);
 
-  const mappedQuestions = mapQuestions(questions);
-
-  const newSurvey = {
-    uid,
-    surveyInfo: createNewSurveyInfo(),
-    companyId,
-    name,
-    description,
-    startDate,
-    expiringDate,
-    fixedOrder,
-    questions: mappedQuestions,
-    reward,
-    customField
-  };
+  const newSurvey = buildNewSurvey(request);
 
   try {
     const response = await firestore
@@ -110,4 +94,27 @@ async function checkCompanyExists (companyId, reply) {
         message: `there is no company with id "${companyId}"`
       });
   }
+}
+
+function buildNewSurvey (request) {
+  const { uid } = request.headers;
+  const { companyId, name, description, startDate, expiringDate, fixedOrder, questions, reward, customField } = request.body;
+
+  const mappedQuestions = mapQuestions(questions);
+
+  const newSurvey = {
+    uid,
+    surveyInfo: createNewSurveyInfo(),
+    companyId,
+    name,
+    description,
+    startDate,
+    expiringDate,
+    fixedOrder,
+    questions: mappedQuestions,
+    reward,
+    customField
+  };
+
+  return newSurvey;
 }

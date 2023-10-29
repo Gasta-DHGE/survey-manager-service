@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { firestore } from '../firebase.js';
+import { firestore } from '../firebase/firebase.js';
 import mapSurvey from '../mapper/mapSurvey.js';
 import mapQuestions from './mapQuestions.js';
 
